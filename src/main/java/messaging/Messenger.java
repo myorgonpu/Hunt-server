@@ -21,13 +21,14 @@ public class Messenger {
         this.out = new PrintWriter(socket.getOutputStream(), true);
     }
 
-    public void send(String json) throws IOException{
-        out.write(json);
+    public void send(Message message) throws IOException{
+        Objects.requireNonNull(message);
+        out.write(message.toJSON());
     }
 
-    public String recieve(int timeout) throws IOException {
+    public Message recieve(int timeout) throws IOException {
         socket.setSoTimeout(timeout);
-        return in.readLine();
+        return new Message(in.readLine());
     }
 }
 
