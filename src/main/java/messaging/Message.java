@@ -52,14 +52,27 @@ public class Message {
         this.fields = result;
     }
 
-    public void addField(String key, String value){
+
+    public void addExtraField(String key, String value) throws MessageFormatException{
         Objects.requireNonNull(key);
         Objects.requireNonNull(value);
+        if("target".equals(key)){
+            throw new MessageFormatException("Target isn't allowed to add.");
+        }
+        if("type".equals(key)){
+            throw new MessageFormatException("Type isn't allowed to add.");
+        }
         fields.put(key, value);
     }
 
     public String getValue(String key){
         Objects.requireNonNull(key);
+        if("target".equals(key)){
+            return target.getName();
+        }
+        if("type".equals(key)){
+            return type.getName();
+        }
         return fields.get(key);
     }
 
