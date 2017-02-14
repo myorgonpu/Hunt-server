@@ -1,6 +1,9 @@
 package main.java.messaging;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,26 @@ public class Message {
         this.fields = new HashMap<String, String>();
     }
 
+    public Message(String json) throws IOException {
+        HashMap<String,String> result =
+                new ObjectMapper().readValue(json, HashMap.class);
+        for(Target target: Target.values()){
+            if(result.get("target").equals(target.getName())){
+                this.target = target;
+                result.remove("target");
+                break;
+            }
+        }
+        for(Type type: Type.values()){
+            if(result.get("type").equals(type.getName())){
+                this.type = type;
+                result.remove("type");
+                break;
+            }
+        }
+        this.fields = result;
+    }
+
     public void addField(String key, String value){
         fields.put(key, value);
     }
@@ -30,11 +53,11 @@ public class Message {
         return fields.get(key);
     }
 
-    public String toJSON(){
+    public String toJSON() throws JsonProcessingException {
         Map<String, String> allFields = new HashMap<String, String>(fields);
         allFields.put("type" , type.getName());
         allFields.put("target" , target.getName());
-        //ObjectMapper objectMapper;
-        return "";
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(allFields);
     }
 }
