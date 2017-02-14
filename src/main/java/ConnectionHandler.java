@@ -15,11 +15,9 @@ public class ConnectionHandler {
             ServerSocket serverSocket = new ServerSocket(PORT);
             while (true){
                 final Socket client = serverSocket.accept();
-                new Thread(new Runnable() {
-                    public void run() {
+                new Thread(() -> {
                         AuthHandler authHandler = new AuthHandler(client);
                         authHandler.processUserInfo();
-                    }
                 }).start();
             }
         } catch (IOException e) {
