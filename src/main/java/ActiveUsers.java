@@ -1,7 +1,12 @@
 package main.java;
 
-/**
- * Created by Slon on 13.02.2017.
- */
+
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class ActiveUsers {
+    private static final CopyOnWriteArrayList<User> users = new CopyOnWriteArrayList<User>();
+
+    public static CopyOnWriteArrayList<User> getUsers() {
+        return users;
+    }
 }
