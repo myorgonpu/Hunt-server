@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Objects;
 
 
 public class Messenger {
@@ -14,6 +15,7 @@ public class Messenger {
     private PrintWriter out;
 
     public Messenger(Socket socket) throws IOException{
+        Objects.requireNonNull(socket);
         this.socket = socket;
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new PrintWriter(socket.getOutputStream(), true);
