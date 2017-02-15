@@ -1,6 +1,8 @@
 package main.java;
 
 
+import main.java.messaging.MessageFormatException;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,7 +19,11 @@ public class ConnectionHandler {
                 final Socket client = serverSocket.accept();
                 new Thread(() -> {
                         AuthHandler authHandler = new AuthHandler(client);
+                    try {
                         authHandler.processUserInfo();
+                    } catch (MessageFormatException e) {
+                        e.printStackTrace();
+                    }
                 }).start();
             }
         } catch (IOException e) {

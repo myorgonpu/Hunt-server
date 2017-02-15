@@ -59,7 +59,7 @@ public class Message {
         if(MessageFields.TARGET.equals(key)){
             throw new MessageFormatException("Target isn't allowed to add.");
         }
-        if(MessageFields.TARGET.equals(key)){
+        if(MessageFields.TYPE.equals(key)){
             throw new MessageFormatException("Type isn't allowed to add.");
         }
         fields.put(key, value);
