@@ -4,24 +4,43 @@ package main.java;
  * Created by Marina on 12.02.2017.
  */
 public class User {
-    private Integer id_user;
-    private String nickname;
+    private int id;
     private String login;
     private String password;
-    private int account;
+    private int score;
 
-    public User(){}
-
-    public Integer getId() {
-        return id_user;
+    public User(String login, String password, int score) {
+        this.login = login;
+        this.password = password;
+        this.score = score;
     }
 
-    public void setId(Integer id_user) {
-        this.id_user = id_user;
+    public User(int id,String login, String password, int score) {
+        this.id=id;
+        this.login = login;
+        this.password = password;
+        this.score = score;
+    }
+    public User(){};
+
+    public String getLogin() {
+        return login;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public String getPassword() {
+        return password;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setLogin(String login) {
@@ -32,30 +51,13 @@ public class User {
         this.password = password;
     }
 
-    public String getPassword() {
-        return password;
+    public void setScore(int score) {
+        this.score = score;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public int getAccount() {
-        return account;
-    }
-
-   /* @Override
+    @Override
     public String toString(){
-        return "User{"+
-                ",id_user='"+id_user+'\'' +
-                ",nickname='"+nickname+'\'' +
-                ",login='"+login+'\'' +
-                ",password='"+password+'\'' +
-                ",account='"+account+
-                '?';
-    }*/
+        return getId()+" "+getLogin()+" " +getPassword()+" "+getScore();
+    }
+
 }
