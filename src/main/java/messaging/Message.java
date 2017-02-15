@@ -36,16 +36,16 @@ public class Message {
         HashMap<String,String> result =
                 new ObjectMapper().readValue(json, HashMap.class);
         for(Target target: Target.values()){
-            if(result.get("target").equals(target.getName())){
+            if(result.get(MessageFields.TARGET).equals(target.getName())){
                 this.target = target;
-                result.remove("target");
+                result.remove(MessageFields.TARGET);
                 break;
             }
         }
         for(Type type: Type.values()){
-            if(result.get("type").equals(type.getName())){
+            if(result.get(MessageFields.TYPE).equals(type.getName())){
                 this.type = type;
-                result.remove("type");
+                result.remove(MessageFields.TYPE);
                 break;
             }
         }
@@ -56,10 +56,10 @@ public class Message {
     public void addExtraField(String key, String value) throws MessageFormatException{
         Objects.requireNonNull(key);
         Objects.requireNonNull(value);
-        if("target".equals(key)){
+        if(MessageFields.TARGET.equals(key)){
             throw new MessageFormatException("Target isn't allowed to add.");
         }
-        if("type".equals(key)){
+        if(MessageFields.TARGET.equals(key)){
             throw new MessageFormatException("Type isn't allowed to add.");
         }
         fields.put(key, value);
@@ -67,10 +67,10 @@ public class Message {
 
     public String getValue(String key){
         Objects.requireNonNull(key);
-        if("target".equals(key)){
+        if(MessageFields.TARGET.equals(key)){
             return target.getName();
         }
-        if("type".equals(key)){
+        if(MessageFields.TYPE.equals(key)){
             return type.getName();
         }
         return fields.get(key);
@@ -78,8 +78,8 @@ public class Message {
 
     public String toJSON() throws JsonProcessingException {
         Map<String, String> allFields = new HashMap<>(fields);
-        allFields.put("type" , type.getName());
-        allFields.put("target" , target.getName());
+        allFields.put(MessageFields.TYPE , type.getName());
+        allFields.put(MessageFields.TARGET , target.getName());
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(allFields);
     }

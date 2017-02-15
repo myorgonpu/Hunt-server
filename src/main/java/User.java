@@ -18,6 +18,16 @@ public class User {
         this.messenger = messenger;
     }
 
+    public User(String login, String password, int score) {
+        this.login = login;
+        this.password = password;
+        this.score = score;
+    }
+
+    public User(){
+
+    }
+
     public int getId() {
         return id;
     }
