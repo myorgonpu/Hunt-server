@@ -23,6 +23,7 @@ public class MainLoop {
             Map<User, Message> messages = askUsers();
             updateUsers(messages);
             makeEncounters(checkEncounters());
+            System.out.println("update");
         }
     }
 

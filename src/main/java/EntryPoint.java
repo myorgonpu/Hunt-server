@@ -7,4 +7,8 @@ public class EntryPoint {
         MainLoop game = new MainLoop();
         game.loop();
     }
+    // TODO: тестить авторизацию/регистрацию и БД
+    //       сделать роли
+    //       сделать енкаунтер
+    //       тестить с клиентом
 }
