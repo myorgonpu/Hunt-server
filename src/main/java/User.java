@@ -8,6 +8,7 @@ public class User {
     private String login;
     private String password;
     private int score;
+    private Role role;
     private Messenger messenger;
     private Location location;
     private int timesAFK = 0;
@@ -28,6 +29,14 @@ public class User {
 
     public User(){
 
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public int getId() {

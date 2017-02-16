@@ -11,15 +11,18 @@ import main.java.messaging.ServerMessageFactory;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class MainLoop {
 
+    public static final int ENCOUNTER_DISTANCE = 200;
     private static final int MESSAGE_TIMEOUT_SEC = 15;
 
     public void loop(){
         while (true){
             Map<User, Message> messages = askUsers();
             updateUsers(messages);
+            makeEncounters(checkEncounters());
         }
     }
 
@@ -89,4 +92,50 @@ public class MainLoop {
         }
     }
 
+    private Map<User, User> checkEncounters() {
+        List<User> hunters = new ArrayList<>();
+        List<User> runners = new ArrayList<>();
+        Map<User, User> pairs = new HashMap<>();
+
+        for(User user: ActiveUsers.getUsers()) {
+            switch (user.getRole()) {
+                case HUNTER:
+                    hunters.add(user);
+                    break;
+                case RUNNER:
+                    runners.add(user);
+                    break;
+            }
+        }
+
+        for (User runner : runners) {
+            List<Double> distances = new ArrayList<>();
+            for (User hunter : hunters) {
+                distances.add(runner.getLocation().distanceTo(hunter.getLocation()));
+            }
+
+            double distance = Collections.min(distances);
+            if (distance <= ENCOUNTER_DISTANCE) {
+                User hunter = hunters.get(distances.indexOf(distance));
+                hunters.remove(hunter);
+                pairs.put(hunter, runner);
+            }
+        }
+
+        return pairs;
+    }
+
+    private void makeEncounters(Map<User,User> pairs) {
+        // TODO: определить момент инициализации роли!
+        for (Map.Entry<User, User> pair: pairs.entrySet()) {
+            User hunter = pair.getKey();
+            User runner = pair.getValue();
+            ActiveUsers.getUsers().remove(hunter);
+            ActiveUsers.getUsers().remove(runner);
+            new Thread(()->{
+               Encounter encounter = new Encounter(hunter, runner);
+               encounter.startGameLoop();
+            }).start();
+        }
+    }
 }
