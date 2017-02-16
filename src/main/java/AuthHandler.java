@@ -85,7 +85,18 @@ public class AuthHandler {
         User user = userRepository.get(login, password);
         if(user == null){
             response.addExtraField(MessageFields.STATUS, "error");
-            response.addExtraField(MessageFields.ERROR, "Wrong authorization info");
+            response.addExtraField(MessageFields.ERROR, "Wrong authorization info: user is not exists");
+            return response;
+        }
+
+        if(message.getValue(MessageFields.ROLE).equalsIgnoreCase(Role.HUNTER.getName())){
+            user.setRole(Role.HUNTER);
+        }else if(message.getValue(MessageFields.ROLE).equalsIgnoreCase(Role.RUNNER.getName())){
+            user.setRole(Role.RUNNER);
+        }
+        else{
+            response.addExtraField(MessageFields.STATUS, "error");
+            response.addExtraField(MessageFields.ERROR, "Wrong authorization info: role");
             return response;
         }
         user.setMessenger(messenger);

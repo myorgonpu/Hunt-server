@@ -13,4 +13,5 @@ public class MessageFields {
     public static final String MESSAGE = "message";
     public static final String SUMMARY = "summary";
     public static final String LOCATION = "location";
+    public static final String ROLE = "role";
 }
