@@ -13,7 +13,7 @@ public class RepositoryStub implements UserRepository {
     private ArrayList<User> users = new ArrayList<>();
 
     public RepositoryStub() {
-        users.add(new User("pupok666", "123456", 0));
+        users.add(new User("pupok666", "12345", 0));
         users.add(new User("vasil", "qwerty", 0));
     }
 

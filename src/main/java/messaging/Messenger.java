@@ -23,19 +23,12 @@ public class Messenger {
 
     public void send(Message message) throws IOException{
         Objects.requireNonNull(message);
-        out.write(message.toJSON());
+        out.println(message.toJSON());
     }
 
     public Message receive(int timeout) throws IOException {
-//        socket.setSoTimeout(timeout);
-
-        String line = null;
-        String lines = "";
-        while ((line = in.readLine()) != null) {
-            lines += line;
-        }
-        System.out.println("lines: " + lines);
-        return new Message(lines);
+        socket.setSoTimeout(timeout);
+        return new Message(in.readLine());
     }
 }
 

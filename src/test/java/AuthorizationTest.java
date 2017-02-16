@@ -1,9 +1,13 @@
 package test.java;
 
+import main.java.AuthHandler;
 import main.java.ConnectionHandler;
 import main.java.Role;
 import main.java.messaging.*;
+import org.json.JSONException;
+import org.junit.Assert;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -17,7 +21,7 @@ public class AuthorizationTest {
     private static final int PORT = 1234;
 
     @Test
-    public void successfulAuthorization() throws IOException, MessageFormatException, InterruptedException {
+    public void successfulAuthorization() throws IOException, MessageFormatException, InterruptedException, JSONException {
 
         new Thread(()->{
             new ConnectionHandler().start();
@@ -31,14 +35,10 @@ public class AuthorizationTest {
         auth.addExtraField(MessageFields.PASSWORD, "12345");
         auth.addExtraField(MessageFields.ROLE, Role.HUNTER.getName());
 
-        System.out.println("1");
-//        Thread.sleep(2000);
         messenger.send(auth);
-        System.out.println("2");
-        Message response = messenger.receive(0);
+        Message response = messenger.receive(AuthHandler.TIMEOUT_MILLIS);
 
-        System.out.println("3");
-        System.out.println(response.toJSON());
+        JSONAssert.assertEquals("{\"type\":\"response\",\"target\":\"authorization\"}", response.toJSON(), false);
 
         client.close();
     }

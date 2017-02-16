@@ -11,7 +11,8 @@ import java.net.Socket;
 
 public class AuthHandler {
 
-    private static final int TIMEOUT_MILLIS = 200;
+    // FIXIT: find optimal timeout
+    public static final int TIMEOUT_MILLIS = 2000;
 
     private Socket client;
     private UserRepository userRepository;
@@ -34,16 +35,8 @@ public class AuthHandler {
 
         try {
             Messenger messenger = new Messenger(client);
-
-            System.out.println("1-1");
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             Message message = messenger.receive(TIMEOUT_MILLIS);
 
-            System.out.println("1-2");
 
             if(message.getValue(MessageFields.TYPE).equals(Type.REQUEST.getName())){
                 if(message.getValue(MessageFields.TARGET)

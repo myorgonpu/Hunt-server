@@ -20,10 +20,10 @@ public class ConnectionHandler {
             while (true){
                 final Socket client = serverSocket.accept();
                 new Thread(() -> {
+                    // TODO: solve da stub
                         AuthHandler authHandler = new AuthHandler(client, new RepositoryStub());
                     try {
                         authHandler.processUserInfo();
-
                     } catch (MessageFormatException e) {
                         e.printStackTrace();
                     }
