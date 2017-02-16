@@ -9,6 +9,8 @@ public class User {
     private String password;
     private int score;
     private Messenger messenger;
+    private Location location;
+    private int timesAFK = 0;
 
     public User(int id, String login, String password, int score, Messenger messenger) {
         this.id = id;
@@ -66,5 +68,44 @@ public class User {
 
     public void setMessenger(Messenger messenger) {
         this.messenger = messenger;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public int getTimesAFK() {
+        return timesAFK;
+    }
+
+    public void setAFK(boolean isAFK) {
+        if(isAFK){
+            timesAFK++;
+        }else{
+            timesAFK = 0;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != user.id) return false;
+        return login.equals(user.login);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + login.hashCode();
+        return result;
     }
 }

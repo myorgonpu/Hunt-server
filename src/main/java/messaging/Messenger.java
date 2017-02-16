@@ -26,7 +26,7 @@ public class Messenger {
         out.write(message.toJSON());
     }
 
-    public Message recieve(int timeout) throws IOException {
+    public Message receive(int timeout) throws IOException {
         socket.setSoTimeout(timeout);
         return new Message(in.readLine());
     }

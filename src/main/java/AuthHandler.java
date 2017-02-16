@@ -26,7 +26,7 @@ public class AuthHandler {
 
         try {
             Messenger messenger = new Messenger(client);
-            Message message = messenger.recieve(TIMEOUT_MILLIS);
+            Message message = messenger.receive(TIMEOUT_MILLIS);
 
             if(message.getValue(MessageFields.TYPE).equals(Type.REQUEST.getName())){
                 if(message.getValue(MessageFields.TARGET)
