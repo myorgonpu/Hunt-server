@@ -27,8 +27,15 @@ public class Messenger {
     }
 
     public Message receive(int timeout) throws IOException {
-        socket.setSoTimeout(timeout);
-        return new Message(in.readLine());
+//        socket.setSoTimeout(timeout);
+
+        String line = null;
+        String lines = "";
+        while ((line = in.readLine()) != null) {
+            lines += line;
+        }
+        System.out.println("lines: " + lines);
+        return new Message(lines);
     }
 }
 

@@ -21,12 +21,29 @@ public class AuthHandler {
         this.userRepository = UserRepositoryRDB.getInstance();
     }
 
+    public AuthHandler(Socket client, UserRepository userRepository) {
+        this.client = client;
+        this.userRepository = userRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public void processUserInfo() throws MessageFormatException{
 
         try {
             Messenger messenger = new Messenger(client);
+
+            System.out.println("1-1");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Message message = messenger.receive(TIMEOUT_MILLIS);
+
+            System.out.println("1-2");
 
             if(message.getValue(MessageFields.TYPE).equals(Type.REQUEST.getName())){
                 if(message.getValue(MessageFields.TARGET)

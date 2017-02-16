@@ -2,6 +2,7 @@ package main.java;
 
 
 import main.java.messaging.MessageFormatException;
+import test.java.RepositoryStub;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -11,6 +12,7 @@ public class ConnectionHandler {
 
     private static final int PORT = 1234;
 
+
     public void start(){
 
         try {
@@ -18,9 +20,10 @@ public class ConnectionHandler {
             while (true){
                 final Socket client = serverSocket.accept();
                 new Thread(() -> {
-                        AuthHandler authHandler = new AuthHandler(client);
+                        AuthHandler authHandler = new AuthHandler(client, new RepositoryStub());
                     try {
                         authHandler.processUserInfo();
+
                     } catch (MessageFormatException e) {
                         e.printStackTrace();
                     }
