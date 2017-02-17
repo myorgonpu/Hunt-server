@@ -1,6 +1,7 @@
 package main.java;
 
 
+import main.java.database.UserRepository;
 import main.java.messaging.MessageFormatException;
 import test.java.RepositoryStub;
 
@@ -10,18 +11,23 @@ import java.net.Socket;
 
 public class ConnectionHandler {
 
-    private static final int PORT = 1234;
+    private int port;
+    private UserRepository repository;
 
+    public ConnectionHandler(int port, UserRepository repository) {
+        this.repository = repository;
+        this.port = port;
+    }
 
     public void start(){
 
         try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
+            ServerSocket serverSocket = new ServerSocket(port);
             while (true){
                 final Socket client = serverSocket.accept();
                 new Thread(() -> {
                     // TODO: solve da stub
-                        AuthHandler authHandler = new AuthHandler(client, new RepositoryStub());
+                        AuthHandler authHandler = new AuthHandler(client, repository);
                     try {
                         authHandler.processUserInfo();
                     } catch (MessageFormatException e) {

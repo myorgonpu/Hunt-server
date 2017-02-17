@@ -24,7 +24,7 @@ public class AuthorizationTest {
     public void successfulAuthorization() throws IOException, MessageFormatException, InterruptedException, JSONException {
 
         new Thread(()->{
-            new ConnectionHandler().start();
+            new ConnectionHandler(PORT, new RepositoryStub()).start();
         }).start();
 
         Socket client = new Socket(HOST, PORT);

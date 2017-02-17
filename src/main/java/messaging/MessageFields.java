@@ -11,7 +11,7 @@ public class MessageFields {
     public static final String LONGITUDE = "longitude";
     public static final String LATITUDE = "latitude";
     public static final String MESSAGE = "message";
-    public static final String SUMMARY = "summary";
+    public static final String WINNER = "winner";
     public static final String LOCATION = "location";
     public static final String ROLE = "role";
 }
