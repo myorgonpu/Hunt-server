@@ -35,7 +35,12 @@ public class RepositoryStub implements UserRepository {
 
     @Override
     public User update(User user) {
-        return null;
+        for(int i = 0; i < users.size(); i++) {
+            if(users.get(i).getId() == user.getId()) {
+                users.set(i, user);
+            }
+        }
+        return user;
     }
 
     @Override

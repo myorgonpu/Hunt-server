@@ -3,6 +3,8 @@ package main.java;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import main.java.database.UserRepository;
+import main.java.database.UserRepositoryRDB;
 import main.java.messaging.Message;
 import main.java.messaging.MessageFields;
 import main.java.messaging.MessageFormatException;
@@ -15,8 +17,16 @@ import java.util.stream.Collectors;
 
 public class MainLoop {
 
-    public static final int ENCOUNTER_DISTANCE = 200;
+    private static final int ENCOUNTER_DISTANCE = 200;
     private static final int MESSAGE_TIMEOUT_SEC = 15;
+    private int encounterTimeoutMillis;
+
+    private UserRepository repository;
+
+    public MainLoop(int encounterTimeoutMillis, UserRepository repository) {
+        this.encounterTimeoutMillis = encounterTimeoutMillis;
+        this.repository = repository;
+    }
 
     public void loop(){
         while (true){
@@ -122,7 +132,7 @@ public class MainLoop {
                 pairs.put(hunter, runner);
             }
         }
-
+//        System.out.print(1);
         return pairs;
     }
 
@@ -134,7 +144,7 @@ public class MainLoop {
             ActiveUsers.getUsers().remove(hunter);
             ActiveUsers.getUsers().remove(runner);
             new Thread(()->{
-               Encounter encounter = new Encounter(hunter, runner);
+               Encounter encounter = new Encounter(hunter, runner, repository, encounterTimeoutMillis);
                encounter.startGameLoop();
             }).start();
         }
