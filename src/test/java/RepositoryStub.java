@@ -5,6 +5,7 @@ import main.java.database.AlreadyExistingException;
 import main.java.database.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Slon on 16.02.2017.
@@ -49,7 +50,17 @@ public class RepositoryStub implements UserRepository {
     }
 
     @Override
-    public User getAll() {
+    public List<User> getAll() {
+
         return null;
     }
+
+    public String getScores() {
+        StringBuilder scores = new StringBuilder();
+        for(User user: users) {
+            scores.append(user.getLogin() + " " + user.getScore() + "\n");
+        }
+        return scores.toString();
+    }
+
 }

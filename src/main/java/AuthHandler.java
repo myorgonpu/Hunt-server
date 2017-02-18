@@ -75,7 +75,7 @@ public class AuthHandler {
             return response;
         }
 
-        message.addExtraField(MessageFields.STATUS, "success");
+        response.addExtraField(MessageFields.STATUS, "success");
         return response;
     }
 
@@ -112,7 +112,7 @@ public class AuthHandler {
         user.setMessenger(messenger);
         ActiveUsers.getUsers().add(user);
 
-        message.addExtraField(MessageFields.STATUS, "success");
+        response.addExtraField(MessageFields.STATUS, "success");
         return response;
     }
 

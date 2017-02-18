@@ -4,6 +4,7 @@ import main.java.User;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class UserRepositoryRDB implements UserRepository{
@@ -95,29 +96,29 @@ public class UserRepositoryRDB implements UserRepository{
     }
 
     @Override
-    public User getAll() {
-        final String getUser =
-                "SELECT user.id_user AS id,user.login AS login, " +
-                "user.password AS password, user.score AS score " +
-                "FROM user ";
-        ArrayList<ArrayList<User>> list = new ArrayList<>();
-        int i = 0;
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(getUser);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            User user=new User();
-            while (resultSet.next()){
-                user.setId(resultSet.getInt("id"));
-                user.setLogin(resultSet.getString("login"));
-                user.setPassword(resultSet.getString("password"));
-                user.setScore(resultSet.getInt("score"));
-                list.add(new ArrayList<User>());
-                list.get(i).add(user);
-                i++;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public List<User> getAll() {
+//        final String getUser =
+//                "SELECT user.id_user AS id,user.login AS login, " +
+//                "user.password AS password, user.score AS score " +
+//                "FROM user ";
+//        ArrayList<ArrayList<User>> list = new ArrayList<>();
+//        int i = 0;
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(getUser);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            User user=new User();
+//            while (resultSet.next()){
+//                user.setId(resultSet.getInt("id"));
+//                user.setLogin(resultSet.getString("login"));
+//                user.setPassword(resultSet.getString("password"));
+//                user.setScore(resultSet.getInt("score"));
+//                list.add(new ArrayList<User>());
+//                list.get(i).add(user);
+//                i++;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 }

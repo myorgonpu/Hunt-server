@@ -1,10 +1,7 @@
 package main.java;
 
 import main.java.database.UserRepository;
-import main.java.messaging.Message;
-import main.java.messaging.MessageFields;
-import main.java.messaging.MessageFormatException;
-import main.java.messaging.ServerMessageFactory;
+import main.java.messaging.*;
 
 import java.io.IOException;
 
@@ -29,18 +26,29 @@ public class Encounter {
         }
 
         try {
-            Message hunterResponse = hunter.getMessenger().receive(encounterTimeoutMillis);
-            Message runnerResponse = runner.getMessenger().receive(encounterTimeoutMillis);
-            if(hunterResponse.toJSON().equals(runnerResponse.toJSON())) {
-                switch (hunterResponse.getValue(MessageFields.WINNER)) {
-                    case "hunter":
-                        submitResults(hunter);
-                        break;
-                    case "runner":
-                        submitResults(runner);
-                        break;
+            Message hunterResponse = hunter.getMessenger().receive(encounterTimeoutMillis);;
+            Message runnerResponse = runner.getMessenger().receive(encounterTimeoutMillis);;
+            while (true) {
+                if(hunterResponse != null && !hunterResponse.getValue(MessageFields.TARGET).equals(Target.ENCOUNTER.getName())){
+                    hunterResponse = hunter.getMessenger().receive(encounterTimeoutMillis);
+                }
+                if(runnerResponse != null && !runnerResponse.getValue(MessageFields.TARGET).equals(Target.ENCOUNTER.getName())){
+                    runnerResponse = runner.getMessenger().receive(encounterTimeoutMillis);
+                }
+
+                if(runnerResponse.toJSON().equals(hunterResponse.toJSON())) {
+                    switch (hunterResponse.getValue(MessageFields.WINNER)) {
+                        case "hunter":
+                            submitResults(hunter);
+                            break;
+                        case "runner":
+                            submitResults(runner);
+                            break;
+                    }
+                    break;
                 }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
             submitResults(runner);
