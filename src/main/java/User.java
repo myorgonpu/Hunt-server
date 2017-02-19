@@ -13,6 +13,7 @@ public class User {
     private Location location;
     private int timesAFK = 0;
     private boolean isInteracting;
+    private long lastEncounterTime;
 
     public User(int id, String login, String password, int score, Messenger messenger) {
         this.id = id;
@@ -21,6 +22,7 @@ public class User {
         this.score = score;
         this.messenger = messenger;
         this.isInteracting = false;
+        lastEncounterTime = System.currentTimeMillis();
     }
 
     public User(String login, String password, int score) {
@@ -28,6 +30,7 @@ public class User {
         this.password = password;
         this.score = score;
         this.isInteracting = false;
+        lastEncounterTime = System.currentTimeMillis();
     }
 
     public User(){
@@ -128,5 +131,13 @@ public class User {
         int result = id;
         result = 31 * result + login.hashCode();
         return result;
+    }
+
+    public long getLastEncounterTime() {
+        return lastEncounterTime;
+    }
+
+    public void setLastEncounterTime(long lastEncounterTime) {
+        this.lastEncounterTime = lastEncounterTime;
     }
 }

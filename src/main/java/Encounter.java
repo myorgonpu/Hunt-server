@@ -6,19 +6,17 @@ import main.java.messaging.*;
 import java.io.IOException;
 
 public class Encounter {
-    public static final int ENCOUNTER_TIME = 15;
-    public static final int HUNTING_DISTANCE = 20;
+    public static final int ENCOUNTER_TIME = 15; // TODO: TEMPORARY FOR TESTS
+    public static final int HUNTING_DISTANCE = 200;
     public static final int HUNTING_TIME = 10;
-    public int encounterTimeoutMillis;
     private User hunter;
     private User runner;
     private UserRepository repository;
 
-    public Encounter(User hunter, User runner, UserRepository repository, int encounterTimeoutMillis) {
+    public Encounter(User hunter, User runner, UserRepository repository) {
         this.hunter = hunter;
         this.runner = runner;
         this.repository = repository;
-        this.encounterTimeoutMillis = encounterTimeoutMillis;
     }
 
     public void startGameLoop() {
@@ -33,7 +31,7 @@ public class Encounter {
         this.runner.setInteracting(true);
 
         long startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis() - startTime < ENCOUNTER_TIME * 1000 * 60){
+        while(System.currentTimeMillis() - startTime < ENCOUNTER_TIME * 1000 /* TODO * 60 */){
             double distance = hunter.getLocation().distanceTo(runner.getLocation());
             if(distance < HUNTING_DISTANCE){
                 boolean huntersWin = startHunting();
@@ -44,10 +42,6 @@ public class Encounter {
             }
         }
         submitResults(runner);
-
-        this.hunter.setInteracting(false);
-        this.runner.setInteracting(false);
-
     }
 
     private boolean startHunting() {
@@ -69,6 +63,12 @@ public class Encounter {
     }
 
     private void submitResults(User winner) {
+        this.hunter.setInteracting(false);
+        this.runner.setInteracting(false);
+
+        this.hunter.setLastEncounterTime(System.currentTimeMillis());
+        this.runner.setLastEncounterTime(System.currentTimeMillis());
+
         winner.setScore(winner.getScore() + 1);
         repository.update(winner);
         try {

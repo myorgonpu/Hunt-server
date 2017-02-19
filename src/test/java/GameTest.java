@@ -19,28 +19,11 @@ public class GameTest {
 
     @Test
     public void runnerWin() throws IOException, InterruptedException {
-//        User client1 = new User("pupok666", "12345", 0);
-//        client1.setRole(Role.HUNTER);
-//
-//        User client2 = new User("vasyl", "12345", 0);
-//        client2.setRole(Role.RUNNER);
-//
-//        ActiveUsers.getUsers().add(client1);
-//        ActiveUsers.getUsers().add(client2);
 
         UserRepository repository = new RepositoryStub();
         new Thread(()->{
             new ConnectionHandler(PORT, repository).start();
         }).start();
-
-//        Socket socket1 = new Socket(HOST, PORT);
-//        Socket socket2 = new Socket(HOST, PORT);
-//
-//        client1.setMessenger(new Messenger(socket1));
-//        client2.setMessenger(new Messenger(socket2));
-//
-//        client1.setLocation(new Location(46.579207, 30.809716));
-//        client2.setLocation(new Location(46.579498, 30.809925));
 
         new Thread(()->{
             try {
@@ -61,13 +44,13 @@ public class GameTest {
         }).start();
 
 
-
-        MainLoop game = new MainLoop(0, repository);
+        MainLoop game = new MainLoop(repository);
         game.loop();
-        // фиксить таймауты
-        // убрать слипы
-        // чекать енкаунтер
-        // убрать принты
+        
+        // фиксить таймауты+
+        // убрать слипы+
+        // чекать енкаунтер+
+        // убрать принты+
 
     }
 }
