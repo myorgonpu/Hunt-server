@@ -4,8 +4,8 @@ package main.java;
  * Created by Slon on 16.02.2017.
  */
 public enum Role {
-    HUNTER("HUNTER"),
-    RUNNER("RUNNER");
+    HUNTER("hunter"),
+    RUNNER("runner");
 
     private String name;
 

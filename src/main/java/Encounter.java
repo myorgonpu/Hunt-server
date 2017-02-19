@@ -6,6 +6,9 @@ import main.java.messaging.*;
 import java.io.IOException;
 
 public class Encounter {
+    public static final int ENCOUNTER_TIME = 15;
+    public static final int HUNTING_DISTANCE = 20;
+    public static final int HUNTING_TIME = 10;
     public int encounterTimeoutMillis;
     private User hunter;
     private User runner;
@@ -23,44 +26,56 @@ public class Encounter {
             notifyUsers(ServerMessageFactory.createEncounterStartEvent());
         } catch (MessageFormatException e) {
             e.printStackTrace();
+            return;
         }
 
-        try {
-            Message hunterResponse = hunter.getMessenger().receive(encounterTimeoutMillis);;
-            Message runnerResponse = runner.getMessenger().receive(encounterTimeoutMillis);;
-            while (true) {
-                if(hunterResponse != null && !hunterResponse.getValue(MessageFields.TARGET).equals(Target.ENCOUNTER.getName())){
-                    hunterResponse = hunter.getMessenger().receive(encounterTimeoutMillis);
-                }
-                if(runnerResponse != null && !runnerResponse.getValue(MessageFields.TARGET).equals(Target.ENCOUNTER.getName())){
-                    runnerResponse = runner.getMessenger().receive(encounterTimeoutMillis);
-                }
+        this.hunter.setInteracting(true);
+        this.runner.setInteracting(true);
 
-                if(runnerResponse.toJSON().equals(hunterResponse.toJSON())) {
-                    switch (hunterResponse.getValue(MessageFields.WINNER)) {
-                        case "hunter":
-                            submitResults(hunter);
-                            break;
-                        case "runner":
-                            submitResults(runner);
-                            break;
-                    }
-                    break;
+        long startTime = System.currentTimeMillis();
+        while(System.currentTimeMillis() - startTime < ENCOUNTER_TIME * 1000 * 60){
+            double distance = hunter.getLocation().distanceTo(runner.getLocation());
+            if(distance < HUNTING_DISTANCE){
+                boolean huntersWin = startHunting();
+                if(huntersWin){
+                    submitResults(hunter);
+                    return;
                 }
             }
+        }
+        submitResults(runner);
 
-        } catch (IOException e) {
+        this.hunter.setInteracting(false);
+        this.runner.setInteracting(false);
+
+    }
+
+    private boolean startHunting() {
+        try {
+            notifyUsers(ServerMessageFactory.createCatchingStartEvent());
+        } catch (MessageFormatException e) {
             e.printStackTrace();
-            submitResults(runner);
         }
 
-        ActiveUsers.getUsers().add(hunter);
-        ActiveUsers.getUsers().add(runner);
+        long startTime = System.currentTimeMillis();
+        while(System.currentTimeMillis() - startTime < HUNTING_TIME * 1000){
+            double distance = hunter.getLocation().distanceTo(runner.getLocation());
+            boolean notNear = distance > HUNTING_DISTANCE;
+            if(notNear){
+                return false;
+            }
+        }
+        return true;
     }
 
     private void submitResults(User winner) {
         winner.setScore(winner.getScore() + 1);
         repository.update(winner);
+        try {
+            notifyUsers(ServerMessageFactory.createEncounterEndEvent(winner.getRole()));
+        } catch (MessageFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     private void notifyUsers(Message message) {
@@ -72,3 +87,24 @@ public class Encounter {
         }
     }
 }
+
+
+/*
+timestamp of encounter start
+loop(!encounter done):
+    if users are nearly
+        hunterWin = startHunting
+        if(hunterWin)
+            submitResults(hunter)
+            return;
+submitResults(runner)
+ */
+
+/* hunting
+start = timestamp of hunting start
+loop( now - start < 15 sec):
+    if(!near)
+        return false;
+    continue;
+return true;
+ */

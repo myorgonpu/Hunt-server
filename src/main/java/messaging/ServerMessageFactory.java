@@ -4,6 +4,7 @@ package main.java.messaging;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import main.java.Location;
+import main.java.Role;
 
 import java.util.List;
 
@@ -50,6 +51,18 @@ public class ServerMessageFactory {
     public static Message createEncounterStartEvent() throws MessageFormatException{
         Message message = new Message(Type.EVENT, Target.ENCOUNTER);
         message.addExtraField(MessageFields.MESSAGE, "start_encounter");
+        return message;
+    }
+
+    public static Message createCatchingStartEvent() throws MessageFormatException{ //поменять
+        Message message = new Message(Type.EVENT, Target.ENCOUNTER);
+        message.addExtraField(MessageFields.MESSAGE, "start_catching");
+        return message;
+    }
+
+    public static Message createEncounterEndEvent(Role role) throws MessageFormatException{
+        Message message = new Message(Type.EVENT, Target.ENCOUNTER);
+        message.addExtraField(MessageFields.WINNER, role.getName());
         return message;
     }
 }

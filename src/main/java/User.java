@@ -12,6 +12,7 @@ public class User {
     private Messenger messenger;
     private Location location;
     private int timesAFK = 0;
+    private boolean isInteracting;
 
     public User(int id, String login, String password, int score, Messenger messenger) {
         this.id = id;
@@ -19,16 +20,18 @@ public class User {
         this.password = password;
         this.score = score;
         this.messenger = messenger;
+        this.isInteracting = false;
     }
 
     public User(String login, String password, int score) {
         this.login = login;
         this.password = password;
         this.score = score;
+        this.isInteracting = false;
     }
 
     public User(){
-
+        this.isInteracting = false;
     }
 
     public Role getRole() {
@@ -97,6 +100,15 @@ public class User {
         }else{
             timesAFK = 0;
         }
+    }
+
+
+    public boolean isInteracting() {
+        return isInteracting;
+    }
+
+    public void setInteracting(boolean interacting) {
+        isInteracting = interacting;
     }
 
     @Override

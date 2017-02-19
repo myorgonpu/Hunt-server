@@ -48,6 +48,9 @@ public class MainLoop {
         //TODO: убрать АФК
         final Map<User, Message> messages = new HashMap<>();
         for(User user : ActiveUsers.getUsers()){
+            if(user.isInteracting()){
+                continue;
+            }
             new Thread(()->{
                 try {
                     Message serverRequest = ServerMessageFactory.createTrackingRequest();
@@ -151,8 +154,6 @@ public class MainLoop {
         for (Map.Entry<User, User> pair: pairs.entrySet()) {
             User hunter = pair.getKey();
             User runner = pair.getValue();
-            ActiveUsers.getUsers().remove(hunter);
-            ActiveUsers.getUsers().remove(runner);
             new Thread(()->{
                Encounter encounter = new Encounter(hunter, runner, repository, encounterTimeoutMillis);
                encounter.startGameLoop();
